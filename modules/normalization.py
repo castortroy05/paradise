@@ -4,6 +4,9 @@ Implements Z-score normalization with league coefficients
 """
 import pandas as pd
 import numpy as np
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ZScoreNormalizer:
@@ -93,7 +96,7 @@ class ZScoreNormalizer:
         
         for col in columns:
             if col not in data.columns:
-                print(f"Warning: Column '{col}' not found in data")
+                logger.warning(f"Column '{col}' not found in data")
                 continue
             
             normalized_values = []

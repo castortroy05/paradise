@@ -6,7 +6,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, Rectangle, FancyBboxPatch
+from matplotlib.patches import Circle
 import sys
 import os
 

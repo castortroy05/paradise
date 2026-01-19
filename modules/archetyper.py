@@ -112,7 +112,7 @@ class PlayerArchetyper:
         self.kmeans = KMeans(
             n_clusters=self.n_clusters,
             random_state=self.random_state,
-            n_init=10
+            n_init='auto'
         )
         self.kmeans.fit(X_scaled)
         

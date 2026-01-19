@@ -46,6 +46,10 @@ data/*.csv
 data/*.xlsx
 data/*.json
 
+# Testing
+test_modules.py
+tests/
+
 # OS
 .DS_Store
 Thumbs.db

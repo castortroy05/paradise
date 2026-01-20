@@ -1,6 +1,37 @@
-pandas>=2.0.0,<3.0.0
-numpy>=1.24.0,<3.0.0
-scikit-learn>=1.3.0,<2.0.0
-matplotlib>=3.7.0,<4.0.0
-mplsoccer>=1.1.0,<2.0.0
-streamlit>=1.28.0,<2.0.0
+# Core Data Processing
+pandas>=2.0.0              # DataFrame operations, CSV/JSON ingestion, player data manipulation
+numpy>=1.24.0              # Numerical computations, metric calculations, array operations
+
+# Linear Programming (Lineup Optimizer)
+pulp>=2.7.0                # Linear programming solver for “Best XI” optimization algorithm
+scipy>=1.11.0              # Scientific computing, optimization utilities, statistical functions
+
+# Web UI Options (choose one or both)
+streamlit>=1.28.0          # Rapid prototyping web interface for interactive dashboards
+flask>=3.0.0               # Lightweight web framework for API endpoints and custom UI
+
+# Data Validation & Schema
+pydantic>=2.5.0            # Data validation, settings management, schema enforcement
+
+# Visualization (for Opponent Analyzer & Reports)
+matplotlib>=3.8.0          # Static plots, pitch visualizations, archetype distributions
+plotly>=5.18.0             # Interactive charts for Streamlit/web dashboards
+mplsoccer>=1.2.0           # Football-specific pitch plots, pass maps, shot charts
+
+# Machine Learning (Player Archetyping)
+scikit-learn>=1.3.0        # K-Means clustering for player archetypes
+
+# API Integration (Data Sources)
+requests>=2.31.0           # HTTP client for StatsBomb, FBRef, Transfermarkt APIs
+httpx>=0.25.0              # Async HTTP client for concurrent data fetching
+
+# Development & Testing
+pytest>=7.4.0              # Unit testing framework
+pytest-cov>=4.1.0          # Test coverage reporting
+black>=23.10.0             # Code formatting
+mypy>=1.6.0                # Static type checking (complements dataclass type hints)
+ruff>=0.1.0                # Fast Python linter
+
+# Optional: Database Storage
+sqlalchemy>=2.0.0          # ORM for persistent player/squad storage
+alembic>=1.12.0            # Database migrations

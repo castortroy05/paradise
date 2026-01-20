@@ -25,6 +25,15 @@ An advanced football analytics utility that leverages event data and league-norm
 pip install -r requirements.txt
 ```
 
+### Conda Environment (Optional)
+
+Create a base environment using the provided `environment.yml`:
+
+```bash
+conda env create -f environment.yml
+conda activate paradise
+```
+
 ## Project Initialization
 
 Run the initialization script to set up a virtual environment and install dependencies:

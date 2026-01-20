@@ -25,6 +25,14 @@ An advanced football analytics utility that leverages event data and league-norm
 pip install -r requirements.txt
 ```
 
+## Project Initialization
+
+Run the initialization script to set up a virtual environment and install dependencies:
+
+```bash
+./scripts/init.sh
+```
+
 ## Usage
 
 ### Run the Streamlit Dashboard

@@ -1,146 +1,108 @@
-# ⚽ P.A.R.A.D.I.S.E.
+# NebulaML
 
-**Player Analysis, Recruitment, Archetyping & Data-driven Identification for Squad Efficiency**
+NebulaML is a starter repository for a distributed computing ML platform. It provides a clean Python codebase for orchestrating training jobs across a cluster, tracking datasets and artifacts, and exposing a simple control-plane API.
 
-An advanced football analytics utility that leverages event data and league-normalization algorithms to identify undervalued talent and optimize lineup synergy.
+## What this repo includes
 
-## Features
+- **Control plane domain models** for jobs, clusters, and datasets
+- **Scheduling primitives** for assigning distributed jobs to worker nodes
+- **Training service abstractions** for launching and monitoring workloads
+- **Fast local iteration** with a lightweight CLI entrypoint
+- **Test suite** for scheduler and orchestration logic
+- **Project docs** describing the architecture and roadmap
 
-- **Z-Score Normalization**: Normalize player statistics across leagues using league coefficients
-- **Player Archetyping**: K-Means clustering to classify players into roles like 'Progressive Pivot', 'High-Press Predator', etc.
-- **Interactive Dashboard**: Streamlit-based UI with player radars and formation synergy checker
-- **4-3-3 Formation Analysis**: Visual formation builder with tactical synergy scoring
+## Platform goals
 
-## Tech Stack
+NebulaML is designed as a foundation for a platform that can grow into:
 
-- **Python** - Core language
-- **Pandas** - Data manipulation
-- **Scikit-learn** - Machine learning (K-Means clustering)
-- **Mplsoccer** - Football visualization
-- **Streamlit** - Interactive dashboard
+- Distributed training orchestration for PyTorch, Ray, or Spark workloads
+- Multi-node experiment tracking and artifact management
+- Dataset registration and lineage tracking
+- GPU-aware scheduling and autoscaling
+- Team workspaces, quotas, and RBAC
+- Model packaging and deployment pipelines
 
-## Installation
+## Repository layout
 
-```bash
-pip install -r requirements.txt
+```text
+src/nebula_ml/
+├── api.py               # API response helpers and control-plane surface
+├── cli.py               # Command line entrypoint
+├── models.py            # Core dataclasses for jobs, datasets, clusters, nodes
+├── scheduler.py         # Resource-aware job placement logic
+└── services/
+    ├── cluster.py       # Cluster management service
+    └── training.py      # Job submission and lifecycle management
+
+docs/
+└── architecture.md      # System architecture and future roadmap
+
+tests/
+├── test_scheduler.py    # Scheduler behavior tests
+└── test_training.py     # Training service tests
 ```
 
-### Conda Environment (Optional)
+## Quickstart
 
-Create a base environment using the provided `environment.yml`:
-
-```bash
-conda env create -f environment.yml
-conda activate paradise
-```
-
-## Project Initialization
-
-Run the initialization script to set up a virtual environment and install dependencies:
+### 1. Create a virtual environment
 
 ```bash
-./scripts/init.sh
+python -m venv .venv
+source .venv/bin/activate
 ```
 
-## Usage
-
-### Run the Streamlit Dashboard
+### 2. Install the package
 
 ```bash
-streamlit run app.py
+pip install -e .
 ```
 
-### Use Modules Programmatically
+### 3. Run the CLI demo
 
-#### Normalization
+```bash
+python -m nebula_ml.cli
+```
+
+### 4. Run the tests
+
+```bash
+python -m pytest
+```
+
+## Example use
 
 ```python
-from modules.normalization import ZScoreNormalizer
-import pandas as pd
+from nebula_ml.models import ClusterNode, JobSpec
+from nebula_ml.services.cluster import ClusterService
+from nebula_ml.services.training import TrainingService
 
-# Create normalizer
-normalizer = ZScoreNormalizer()
+cluster = ClusterService([
+    ClusterNode(name="worker-a", cpu=32, memory_gb=128, gpus=4),
+    ClusterNode(name="worker-b", cpu=16, memory_gb=64, gpus=1),
+])
+training = TrainingService(cluster)
 
-# Normalize player data
-data = pd.DataFrame({
-    'name': ['Player1', 'Player2'],
-    'league': ['Premier League', 'La Liga'],
-    'goals': [20, 25],
-    'assists': [10, 8]
-})
+job = JobSpec(
+    name="resnet50-training",
+    image="ghcr.io/acme/resnet:latest",
+    command=["python", "train.py"],
+    cpu=8,
+    memory_gb=32,
+    gpus=1,
+)
 
-normalized = normalizer.normalize(data, ['goals', 'assists'], 'league')
-print(normalized[['name', 'goals_norm', 'assists_norm']])
+run = training.submit(job)
+print(run.status)
 ```
 
-#### Archetyping
+## Development roadmap
 
-```python
-from modules.archetyper import PlayerArchetyper
-import pandas as pd
+1. Add a real HTTP API using FastAPI.
+2. Introduce a persistent metadata store.
+3. Add pluggable execution backends for Kubernetes and Ray.
+4. Implement queue priorities, preemption, and quotas.
+5. Add experiment tracking and artifact storage integrations.
 
-# Create archetyper
-archetyper = PlayerArchetyper(n_clusters=8)
+## License
 
-# Classify players
-data = pd.DataFrame({
-    'name': ['Player1', 'Player2'],
-    'tackles': [80, 40],
-    'passes': [1500, 2000],
-    'shots': [50, 100]
-})
-
-result = archetyper.fit_predict(data, ['tackles', 'passes', 'shots'])
-print(result[['name', 'archetype_name']])
-```
-
-## Project Structure
-
-```
-paradise/
-├── app.py                    # Streamlit dashboard
-├── modules/
-│   ├── __init__.py
-│   ├── normalization.py      # Z-score normalization
-│   └── archetyper.py         # K-Means clustering
-├── data/                     # Player data files
-├── requirements.txt          # Python dependencies
-└── test_modules.py           # Test suite
-```
-
-## Testing
-
-Run the test suite:
-
-```bash
-python test_modules.py
-```
-
-## Key Concepts
-
-### Z-Score Normalization with League Coefficients
-
-Formula: `(x - mean) / std * league_coefficient`
-
-Accounts for different league strengths when comparing players:
-- Premier League: 1.0
-- La Liga: 0.95
-- Serie A: 0.93
-- Bundesliga: 0.92
-- Ligue 1: 0.88
-
-### Player Archetypes
-
-The K-Means clustering identifies player roles such as:
-- **Progressive Pivot**: High passing volume with progressive passes
-- **High-Press Predator**: Aggressive pressing and tackles
-- **Creative Playmaker**: Key passes and shot-creating actions
-- **Box-to-Box Warrior**: Balanced attacking and defensive contributions
-- **Deep-Lying Controller**: High pass accuracy and long balls
-- **Goal-Scoring Threat**: High shots and goals
-- **Defensive Anchor**: Tackles, interceptions, and clearances
-- **Dynamic Dribbler**: Dribbles and progressive carries
-
-### Formation Synergy
-
-The 4-3-3 formation checker analyzes tactical compatibility between players based on their archetypes and positions, providing a synergy score and recommendations.
+MIT
